@@ -26,6 +26,7 @@ cd heroesFlix-frontend
 3. Instale as dependências:
 ```bash
 npm install
+npm install react-router-dom
 ```
 
 4. Inicie o projeto:
