@@ -1,16 +1,39 @@
-# React + Vite
+# HeroesFlix
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto em **React** com **Vite**, **JavaScrpit** e **React Router**, contendo páginas de login, home e detalhes de heróis.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠 Pré-requisitos
 
-## React Compiler
+- [Node.js](https://nodejs.org/) 18+  
+- npm  
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 💻 Como rodar localmente
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone o repositório:  
+```bash
+git clone https://github.com/devlucasfernandes02/heroesFlix-frontend.git
+```
+
+2. Entre na pasta:
+```bash
+cd heroesFlix-frontend
+```
+
+3. Instale as dependências:
+```bash
+npm install
+```
+
+4. Inicie o projeto:
+```bash
+npm run dev
+```
+
+5. Abra no navegador:
+```bash
+http://localhost:5173/
+```
