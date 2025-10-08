@@ -7,17 +7,48 @@ const Footer = () => {
     return (
         <FooterContainer>
             <FooterContent>
-                <FooterLogo>HeroesFlix</FooterLogo>
-                <FooterText>
-                    © {new Date().getFullYear()} HeroesFlix. Todos os direitos reservados.
-                    <br />
-                    O universo de heróis gratuito que você sempre quis!
-                </FooterText>
-                <FooterLinks>
-                    <FooterLink href="/Login">Acesso Secreto</FooterLink>
-                 
-                </FooterLinks>
+                {/* Informações da Empresa / Copyright */}
+                <BrandSection>
+                    <FooterLogo> <a href="/">HeroesFlix</a></FooterLogo>
+                    <FooterText>
+                        © {new Date().getFullYear()} HeroesFlix. Todos os direitos reservados.
+                        <br />
+                        O universo de heróis gratuito que você sempre quis!
+                        <br />
+                        <Disclaimer>
+                            Este é um projeto de estudo e não possui fins comerciais.
+                        </Disclaimer>
+                    </FooterText>
+                </BrandSection>
+                
+                {/* Colunas de Links */}
+                <FooterGrid>
+                    <FooterLinksColumn>
+                        <FooterLink href="/Login">Acesso Secreto</FooterLink>
+                        <FooterLink href="#">Termos de Missão</FooterLink>
+                        <FooterLink href="#">Regras da Liga</FooterLink>
+                        <FooterLink href="#">Ajuda</FooterLink>
+                    </FooterLinksColumn>
+
+                    <FooterLinksColumn>
+                        <FooterLink href="#">Centro de Imprensa</FooterLink>
+                        <FooterLink href="#">Carreiras de Herói</FooterLink>
+                        <FooterLink href="#">Preferências de Cookies</FooterLink>
+                        <FooterLink href="#">Doações (App Gratuito)</FooterLink>
+                    </FooterLinksColumn>
+                    
+                    <FooterLinksColumn>
+                        <FooterLink href="#">Gift Cards</FooterLink>
+                        <FooterLink href="#">Comunidade</FooterLink>
+                        <FooterLink href="#">Privacidade</FooterLink>
+                        <FooterLink href="#">Fale com o Vigilante</FooterLink>
+                    </FooterLinksColumn>
+                </FooterGrid>
+                
             </FooterContent>
+            <CTA>
+                Pronto para a Ação? <a href="/registrar">Crie seu perfil de Herói.</a>
+            </CTA>
         </FooterContainer>
     );
 };
@@ -27,11 +58,10 @@ export default Footer;
 // --- Estilos do Componente ---
 
 const FooterContainer = styled.footer`
-  /* Fundo escuro para combinar com o tema do streaming/banner */
   background-color: #000; 
-  border-top: 5px solid #1948c7ff; /* Linha de separação azul (referência da sua borda) */
+  border-top: 5px solid #1948c7ff;
   padding: 40px 5%;
-  color: #737373; /* Cor de texto padrão da Netflix */
+  color: #737373;
   font-family: sans-serif;
   z-index: 0;
 `;
@@ -41,22 +71,34 @@ const FooterContent = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
+  padding-bottom: 20px;
 
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Alinha o conteúdo ao topo */
   }
 `;
 
+const BrandSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+`;
+
 const FooterLogo = styled.span`
-  /* Destaque para o nome do app */
   font-size: 1.8rem; 
   font-weight: bold;
   color: #1948c7ff;
   text-transform: uppercase;
   letter-spacing: 2px;
+  margin-bottom: 10px;
+    & a {
+    text-decoration: none;
+    color: #1948c7ff;
+  }
 `;
 
 const FooterText = styled.p`
@@ -65,9 +107,25 @@ const FooterText = styled.p`
   line-height: 1.5;
 `;
 
-const FooterLinks = styled.div`
-  display: flex;
-  gap: 20px;
+const Disclaimer = styled.span`
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #444; /* Cor mais sutil */
+`;
+
+const FooterGrid = styled.div`
+    display: grid;
+    /* 3 Colunas em telas grandes, 1 coluna em telas pequenas */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    gap: 20px;
+    flex-grow: 1; /* Permite que o grid ocupe o espaço restante */
+`;
+
+const FooterLinksColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 `;
 
 const FooterLink = styled.a`
@@ -77,7 +135,24 @@ const FooterLink = styled.a`
   transition: color 0.3s;
 
   &:hover {
-    color: #fff; /* Fica branco ao passar o mouse */
+    color: #fff;
     text-decoration: underline;
   }
+`;
+
+const CTA = styled.div`
+    border-top: 1px solid #222;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 1rem;
+    color: #a8a8a8;
+
+    & a {
+        color: #1948c7ff; /* Cor azul do HeroesFlix */
+        text-decoration: none;
+        font-weight: bold;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 `;
