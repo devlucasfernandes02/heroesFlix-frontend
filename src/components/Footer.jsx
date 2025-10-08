@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { useNavigate } from 'react-router-dom';
 // --- Estrutura do Componente ---
 
 const Footer = () => {
+    const navigate = useNavigate();
+
     return (
         <FooterContainer>
             <FooterContent>
@@ -24,7 +26,7 @@ const Footer = () => {
                 {/* Colunas de Links */}
                 <FooterGrid>
                     <FooterLinksColumn>
-                        <FooterLink href="/Login">Acesso Secreto</FooterLink>
+                        <FooterLink onClick={() => navigate('/Login')}>Acesso Secreto</FooterLink>
                         <FooterLink href="#">Termos de Missão</FooterLink>
                         <FooterLink href="#">Regras da Liga</FooterLink>
                         <FooterLink href="#">Ajuda</FooterLink>
