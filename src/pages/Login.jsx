@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import bannerUrl from '../assets/Heroes-image.webp';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -39,9 +39,9 @@ const Login = () => {
                     
                     <LoginSignup>
                         <span>Ainda não tem conta?</span>
-                        <a href="/Registrar">
+                        <Link to="/Registrar">
                             Crie seu perfil de Herói agora.
-                        </a>
+                        </Link>
                     </LoginSignup>
                 </LoginBox>
             </LoginBoxWrapper>

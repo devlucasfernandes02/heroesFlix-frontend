@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // --- Estrutura do Componente ---
 
 const Footer = () => {
@@ -49,7 +50,7 @@ const Footer = () => {
                 
             </FooterContent>
             <CTA>
-                Pronto para a Ação? <a href="/Registrar">Crie seu perfil de Herói.</a>
+                Pronto para a Ação? <Link to="/Registrar">Crie seu perfil de Herói.</Link>
             </CTA>
         </FooterContainer>
     );
