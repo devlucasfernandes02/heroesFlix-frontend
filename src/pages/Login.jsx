@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Adicionado para estado e validação
 import styled from 'styled-components';
 import bannerUrl from '../assets/Heroes-image.webp';
 import Footer from '../components/Footer';
@@ -7,27 +7,90 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    
+    const [isFormValid, setIsFormValid] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    useEffect(() => {
+        let error = '';
+        let isValid = false;
+
+        const areFieldsFilled = email.length > 0 && password.length > 0;
+
+        if (areFieldsFilled) {
+            if (!validateEmail(email)) {
+                error = 'Email inválido.';
+            } else if (password.length < 6) {
+                error = 'A senha deve ter no mínimo 6 caracteres.';
+            } else {
+                isValid = true;
+            }
+        }
+        
+        if (isValid || (email.length === 0 && password.length === 0)) {
+             setErrorMessage('');
+        } else {
+             setErrorMessage(error);
+        }
+
+        setIsFormValid(isValid);
+
+    }, [email, password]); // Dependências: reexecuta sempre que email ou password mudam
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+
+        if (!isFormValid) {
+            setErrorMessage('Por favor, corrija os erros do formulário.');
+            console.error('Tentativa de login com formulário inválido.');
+            return;
+        }
+        
+        // Simulação de autenticação bem-sucedida
+        // console.log('Login efetuado com:', { email, password });
+        alert('Login bem-sucedido! Redirecionando para Home.'); 
+        navigate('/Home');
+    };
+
     return (
         <Container>
+          
             <HeaderPlaceholder>
-                 <a href="/">HeroesFlix</a> {/* Logo/Link para a Home */}
+                 <a href="/">HeroesFlix</a> 
             </HeaderPlaceholder>
             
             <LoginBoxWrapper>
                 <LoginBox>
                     <LoginTitle>Acesso ao Quartel-General</LoginTitle>
-                    <LoginForm>
+                    {/* Alterado para usar onSubmit e handleLogin */}
+                    <LoginForm onSubmit={handleLogin}>
                         <LoginInput
                             type="email"
                             placeholder="Email ou Telefone"
                             required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            // Prop que será usada no styled-component para mudar a cor da borda
+                            $isInvalid={email.length > 0 && !validateEmail(email)}
                         />
                         <LoginInput
                             type="password"
-                            placeholder="Senha"
+                            placeholder="Senha (mínimo 6 caracteres)"
                             required
-                        />
-                        <Button type="submit" onClick={() => navigate('/Home')}>
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            // Prop que será usada no styled-component para mudar a cor da borda
+                            $isInvalid={password.length > 0 && password.length < 6}
+                            />
+                        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                        <Button type="submit">
                             Entrar
                         </Button>
                         <LoginHelp>
@@ -53,7 +116,7 @@ const Login = () => {
 export default Login;
 
 // ===================================
-// ESTILOS (Styled Components)
+// ESTILOS (Styled Components) - Ajustados para suportar props de validação
 // ===================================
 
 const Container = styled.div`
@@ -116,7 +179,8 @@ const LoginInput = styled.input`
   padding: 16px 20px;
   color: #fff;
   background-color: #333;
-  border: none;
+  /* Adicionado border transparente para evitar layout shift */
+  border: 1px solid transparent; 
   border-radius: 4px;
   font-size: 1rem;
   outline: none;
@@ -124,6 +188,11 @@ const LoginInput = styled.input`
   &:focus {
     border-bottom: 2px solid #1948c7ff;
   }
+  
+  /* Aplica o estilo de erro quando a prop $isInvalid for verdadeira */
+  ${props => props.$isInvalid && `
+    border-bottom: 2px solid #E50914; /* Vermelho de erro */
+  `}
 `;
 
 const LoginHelp = styled.div`
@@ -160,4 +229,16 @@ const LoginSignup = styled.div`
       text-decoration: underline;
     }
   }
+`;
+
+// Novo componente para a mensagem de erro (usa position: absolute na tela)
+const ErrorMessage = styled.p`
+    
+    background-color: #E50914; /* Vermelho Netflix */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    z-index: 20;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
