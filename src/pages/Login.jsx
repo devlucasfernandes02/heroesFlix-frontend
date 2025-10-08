@@ -39,7 +39,7 @@ const Login = () => {
                     
                     <LoginSignup>
                         <span>Ainda não tem conta?</span>
-                        <a href="/registrar">
+                        <a href="/Registrar">
                             Crie seu perfil de Herói agora.
                         </a>
                     </LoginSignup>

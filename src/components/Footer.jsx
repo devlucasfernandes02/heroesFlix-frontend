@@ -49,7 +49,7 @@ const Footer = () => {
                 
             </FooterContent>
             <CTA>
-                Pronto para a Ação? <a href="/registrar">Crie seu perfil de Herói.</a>
+                Pronto para a Ação? <a href="/Registrar">Crie seu perfil de Herói.</a>
             </CTA>
         </FooterContainer>
     );
