@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import bannerUrl from '../assets/Heroes-image.webp';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 // Animações
 const fadeIn = keyframes`
@@ -11,11 +12,14 @@ const fadeIn = keyframes`
 `;
 
 // Componente principal
-const Inicial = () => (
-    <Container>
-        <Header>
-            <Logo>HeroesFlix</Logo>
-            <ButtonHeader onClick={() => window.location.href = '/Login'}>
+const Inicial = () => {
+    const navigate = useNavigate();
+
+    return (
+        <Container>
+            <Header>
+                <Logo>HeroesFlix</Logo>
+                <ButtonHeader onClick={() => navigate('/Login')}>
                 Entrar
             </ButtonHeader>
         </Header>
@@ -28,7 +32,7 @@ const Inicial = () => (
                         Bem-vindo ao <Highlight>HeroesFlix!</Highlight>
                     </Title>
                     <Subtitle>Sua plataforma definitiva para filmes e séries de super-heróis!</Subtitle>
-                    <ButtonInicial onClick={() => window.location.href = '/Login'}>
+                    <ButtonInicial onClick={() => navigate('/Login')}>
                         Entrar
                     </ButtonInicial>
                 </Content>
@@ -37,7 +41,7 @@ const Inicial = () => (
         <CardsSection>
         <GradientRadialBlur />
             <SectionTitle>Por que Escolher HeroesFlix?</SectionTitle>
-            <CardsContainer onClick={() => window.location.href = '/Login'}>
+            <CardsContainer onClick={() => navigate('/Login')}>
                 <Card>
                     <CardTitle>Missões em Qualquer Tela</CardTitle>
                     <CardText>
@@ -71,7 +75,7 @@ const Inicial = () => (
         <Footer />
     </Container>
 );
-
+};
 export default Inicial;
 
 // ----------------------

@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import bannerUrl from '../assets/Heroes-image.webp';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
     return (
         <Container>
             <HeaderPlaceholder>
@@ -25,7 +27,7 @@ const Login = () => {
                             placeholder="Senha"
                             required
                         />
-                        <Button type="submit" onClick={() => window.location.href = '/Home'}>
+                        <Button type="submit" onClick={() => navigate('/Home')}>
                             Entrar
                         </Button>
                         <LoginHelp>
