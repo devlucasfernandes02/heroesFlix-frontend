@@ -1,102 +1,64 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom'; // IMPORTANTE: Adicione Link e useNavigate
-import ListaDeConteudos from '../components/ListaDeConteudos';
+import React from "react";
+import styled from "styled-components";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import ListaDeConteudos from "../components/ListaDeConteudos";
+import bannerUrl from "../assets/Heroes-image.webp";
+import Footer from "../components/Footer";
 
 const Home = () => {
     const navigate = useNavigate();
-    
+    const location = useLocation();
+    const profileName = location.state?.profileName || "Visitante";
+
     return (
         <HomeContainer>
             <HomeHeader>
-                {/* Usando useNavigate no logo para ir para a Home Logada */}
-                <Logo src="/logo.png" alt="HeroesFlix" className="logo" onClick={() => navigate('/Home')} />
-                
-                <nav>
-                    {/* Usando o componente Link para navegação interna */}
-                    <StyledLink to="/Home">Início</StyledLink>
-                    <StyledLink to="/series">Séries</StyledLink> {/* Rota a ser implementada */}
-                    <StyledLink to="/filmes">Filmes</StyledLink> {/* Rota a ser implementada */}
-                    {/* Usando Link em vez de <a> evita o recarregamento completo da página */}
-                </nav>
+                <Logo onClick={() => navigate("/home")}> HeroesFlix </Logo>
+                <Nav>
+                    <StyledLink to="/home">Início</StyledLink>
+                    <StyledLink to="/series">Séries</StyledLink>
+                    <StyledLink to="/filmes">Filmes</StyledLink>
+                </Nav>
+                <Profile>
+                    Bem-vindo, <strong>{profileName}</strong>
+                </Profile>
             </HomeHeader>
 
-            <Banner>
-                {/* Conteúdo do Banner */}
-                <img src="/banner.jpg" alt="Banner" />
+            {/* <Banner>
+                <img src={bannerUrl} alt="Banner" />
                 <BannerInfo>
                     <h1>O Herói da Meia-Noite</h1>
                     <p>O melhor dos heróis com superpoderes e ação ininterrupta!</p>
                     <button>Assistir</button>
                 </BannerInfo>
-            </Banner>
+            </Banner> */}
 
             <ContentWrapper>
-                <ListaDeConteudos 
-                    titulo="Continuar Assistindo" 
-                    // Certifique-se de implementar esta view no seu views.py!
-                    endpoint="filmes/continue-watching" 
-                />
+                {/* Seção de Filmes e Séries de Heróis com scroll infinito */}
+                <ListaDeConteudos titulo="Filmes de Heróis" endpoint="filmes/herois" />
+                <ListaDeConteudos titulo="Séries de Heróis" endpoint="series/herois" />
 
-                <ListaDeConteudos 
-                    titulo="Populares em HeroesFlix" 
-                    // Este endpoint corresponde à view 'filmes_populares' no backend
-                    endpoint="filmes/populares" 
-                />
-
-                <ListaDeConteudos 
-                    titulo="Ação e Aventura" 
-                    // CORRIGIDO: Assumimos que você implementou a view 'filmes_acao'
-                    endpoint="filmes/acao" 
-                />
-
-                <ListaDeConteudos 
-                    titulo="Os Mais Bem Avaliados" 
-                    // Este endpoint corresponde à view 'filmes_top10'
-                    endpoint="filmes/top10" 
-                />
+                {/* Outras seções opcionais, como populares, top 10 e ação */}
+                <ListaDeConteudos titulo="Filmes Marvel" endpoint="filmes/marvel" />
+                <ListaDeConteudos titulo="Filmes DC" endpoint="filmes/dc" />
+                <ListaDeConteudos titulo="Heroes Alternativos" endpoint="filmes/herois-alternativos" />
             </ContentWrapper>
 
-
-            <HomeFooter>
-                HeroesFlix &copy; {new Date().getFullYear()} - Inspirado na Netflix
-            </HomeFooter>
+            <Footer />
         </HomeContainer>
     );
 };
 
 export default Home;
 
-
-// -----------------------------------------------------------
-// STYLED COMPONENTS
-// -----------------------------------------------------------
-
-const StyledLink = styled(Link)`
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    transition: color 0.2s;
-
-    &:hover {
-        color: #e50914;
-    }
-`;
-
-const Logo = styled.img`
-    height: 48px;
-    cursor: pointer; /* Adiciona cursor pointer para indicar que é clicável */
-`;
-
-const ContentWrapper = styled.div`
-    padding-top: 20px;
-`;
+// =================== ESTILOS ===================
 
 const HomeContainer = styled.div`
-    background: #141414;
-    color: #fff;
     min-height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url(${bannerUrl});
+    background-size: cover;
+    background-position: center;
+    color: #fff;
     font-family: 'Roboto', Arial, sans-serif;
 `;
 
@@ -105,32 +67,59 @@ const HomeHeader = styled.header`
     align-items: center;
     justify-content: space-between;
     padding: 24px 40px;
-    background: #181818;
-
-    .logo {
-        height: 48px;
-    }
-
-    nav {
-        display: flex;
-        gap: 32px;
-    }
-`;
-
-const Banner = styled.section`
+    background: rgba(20,20,20,0.95);
     position: relative;
-    width: 100%;
-    height: 340px;
-    overflow: hidden;
-    margin-bottom: 32px;
+    z-index: 10;
+`;
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: brightness(0.6);
+const Logo = styled.h1`
+    font-size: 2.5rem;
+    font-style: italic;
+    color: #1948c7ff;
+    cursor: pointer;
+    user-select: none;
+`;  
+
+const Nav = styled.nav`
+    display: flex;
+    gap: 32px;
+`;
+
+const StyledLink = styled(Link)`
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+    &:hover {
+        color: #1948c7ff;
     }
 `;
+
+const Profile = styled.div`
+    font-size: 1.1rem;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+`;
+
+// const Banner = styled.section`
+//     position: relative;
+//     width: 100%;
+//     height: 340px;
+//     overflow: hidden;
+//     margin-bottom: 32px;
+
+//     img {
+//         width: 100%;
+//         height: 100%;
+//         object-fit: cover;
+//         filter: brightness(0.6);
+//     }
+// `;
 
 const BannerInfo = styled.div`
     position: absolute;
@@ -160,7 +149,6 @@ const BannerInfo = styled.div`
         font-size: 1.1rem;
         border-radius: 4px;
         cursor: pointer;
-        font-weight: bold;
         transition: background 0.2s;
 
         &:hover {
@@ -169,11 +157,6 @@ const BannerInfo = styled.div`
     }
 `;
 
-const HomeFooter = styled.footer`
-    text-align: center;
-    padding: 24px 0;
-    background: #181818;
-    color: #aaa;
-    font-size: 1rem;
-    margin-top: 40px;
+const ContentWrapper = styled.div`
+    padding-top: 20px;
 `;

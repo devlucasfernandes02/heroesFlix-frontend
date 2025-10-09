@@ -55,8 +55,8 @@ const Login = () => {
         
         // Simulação de autenticação bem-sucedida
         // console.log('Login efetuado com:', { email, password });
-        alert('Login bem-sucedido! Redirecionando para Home.'); 
-        navigate('/Home');
+        alert('Login bem-sucedido! Redirecionando para o Perfil.'); 
+        navigate('/Perfil');
     };
 
     return (

@@ -1,9 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import styled from "styled-components";
+import bannerUrl from "../assets/Heroes-image.webp";
+import { useNavigate, Link } from "react-router-dom";
+import Footer from "../components/Footer";
+
 const user = {
-    name: "Lucas Fernandes",
-    email: "lucas@email.com",
-    avatar: "https://ui-avatars.com/api/?name=Lucas+Fernandes&background=0D8ABC&color=fff",
     profiles: [
         { name: "Lucas", avatar: "https://ui-avatars.com/api/?name=Lucas&background=FF5733&color=fff" },
         { name: "Família", avatar: "https://ui-avatars.com/api/?name=Familia&background=33FF57&color=fff" },
@@ -11,51 +12,92 @@ const user = {
 };
 
 export default function Perfil() {
+    const navigate = useNavigate();
+    const [selectedProfile, setSelectedProfile] = useState(null);
+
+    const handleProfileClick = (profile) => {
+        setSelectedProfile(profile.name);
+        // Envia o nome do perfil para a Home via state
+        navigate("/home", { state: { profileName: profile.name } });
+    };
+
     return (
-        <Bg>
-            <Container>
-                <Title>Quem está assistindo?</Title>
-                <Profiles>
-                    {user.profiles.map((profile, idx) => (
-                        <ProfileLink to={`/home?profile=${profile.name}`} key={idx}>
-                            <Avatar src={profile.avatar} alt={profile.name} />
-                            <Name>{profile.name}</Name>
-                        </ProfileLink>
-                    ))}
-                </Profiles>
-                <Actions>
-                    <EditBtn to="/editar-perfil">Editar Perfis</EditBtn>
-                    <LogoutBtn to="/logout">Sair</LogoutBtn>
-                </Actions>
-            </Container>
-        </Bg>
+        <Container>
+            <HeaderPlaceholder>
+                <a href="/">HeroesFlix</a>
+            </HeaderPlaceholder>
+            <BoxWrapper>
+                <Box>
+                    <Title>Quem está assistindo?</Title>
+                    <Profiles>
+                        {user.profiles.map((profile, idx) => (
+                            <ProfileBtn key={idx} onClick={() => handleProfileClick(profile)}>
+                                <Avatar src={profile.avatar} alt={profile.name} />
+                                <Name>{profile.name}</Name>
+                            </ProfileBtn>
+                        ))}
+                    </Profiles>
+                    <Actions>
+                        <EditBtn to="/editar-perfil">Editar Perfis</EditBtn>
+                        <LogoutBtn to="/logout">Sair</LogoutBtn>
+                    </Actions>
+                </Box>
+            </BoxWrapper>
+            <Footer />
+        </Container>
     );
 }
 
-import styled from "styled-components";
+// =================== ESTILOS ===================
 
-const Bg = styled.div`
-    min-height: 100vh;
-    background: linear-gradient(120deg, #141414 60%, #232323 100%);
+const Container = styled.div`
+  min-height: 100dvh;
+  background: linear-gradient(rgba(0, 0, 0, 0.83), rgba(0, 0, 0, 0.83)), url(${bannerUrl});
+  background-size: cover;
+  background-position: center;
+  font-family: sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+`;
+
+const HeaderPlaceholder = styled.div`
+  padding: 20px 10%;
+  font-size: 3.5rem;
+  font-style: italic;
+  font-weight: bold;
+  z-index: 10;
+  position: relative;
+  & a {
+    text-decoration: none;
+    color: #1948c7ff;
+  }
+`;
+
+const BoxWrapper = styled.div`
+    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 50px;
 `;
 
-const Container = styled.div`
-    background: rgba(20, 20, 20, 0.95);
-    border-radius: 16px;
-    padding: 40px 32px;
-    box-shadow: 0 4px 32px rgba(0,0,0,0.7);
-    text-align: center;
-    min-width: 350px;
+const Box = styled.div`
+  max-width: 480px;
+  padding: 40px 68px;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 5;
+  text-align: center;
 `;
 
-const Title = styled.h1`
-    color: #fff;
-    font-size: 2rem;
-    margin-bottom: 32px;
-    font-weight: 600;
+const Title = styled.h2`
+  font-size: 2.4rem;
+  font-weight: bold;
+  margin-bottom: 28px;
+  text-align: center;
 `;
 
 const Profiles = styled.div`
@@ -65,11 +107,14 @@ const Profiles = styled.div`
     margin-bottom: 32px;
 `;
 
-const ProfileLink = styled(Link)`
+const ProfileBtn = styled.button`
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-decoration: none;
     transition: transform 0.2s;
     &:hover {
         transform: scale(1.08);
