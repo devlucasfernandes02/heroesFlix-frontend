@@ -86,7 +86,7 @@ const Container = styled.div`
   
   background-color: #141414;
   color: #fff;
-  font-family: cursive;
+  font-family: sans-serif;
 `;
 
 const Header = styled.header`
@@ -100,7 +100,7 @@ const Header = styled.header`
 
 const Logo = styled.h1`
   color: #1948c7ff;
-  font-family: cursive;
+  font-family: sans-serif;
   font-size: 3.5rem;
   font-style: italic;
   animation: ${fadeIn} 1s ease forwards;
@@ -111,15 +111,15 @@ const ButtonHeader = styled(Button)`
 `;
 
 const Banner = styled.div`
-  height: 80dvh;
-  background: linear-gradient(rgba(0,0,0,0.83), rgba(0,0,0,0.83)), url(${bannerUrl});
+  height: 85dvh;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.78)), url(${bannerUrl});
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 2px solid #1948c7ff;
-  margin-top: -100px;
+  margin-top: -110px;
   z-index: 1;
 `;
 
@@ -168,7 +168,7 @@ const GradientRadialBlur = styled.div`
   height: 10%;           // ajuste conforme necessidade
   z-index: 0;            // atrás do conteúdo
   background: radial-gradient(circle at bottom, #1948c7ff, transparent);
-  opacity: 0.5;          // controla intensidade
+  opacity: 0.7;          // controla intensidade
   filter: blur(60px);    // efeito blur
   pointer-events: none;  // evita que interfira em cliques
 `;
