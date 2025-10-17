@@ -27,6 +27,7 @@ cd heroesFlix-frontend
 ```bash
 npm install
 npm install react-router-dom
+npm install axios
 ```
 
 4. Inicie o projeto:
