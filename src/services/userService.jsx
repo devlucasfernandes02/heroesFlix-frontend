@@ -1,7 +1,7 @@
 import api from "./api";
 import axios from "axios";
 
-const BASE_URL_ROOT = "https://heroesflix-backend.onrender.com";
+const BASE_URL_ROOT = "http://localhost:8000";
 
 export const getUsers = () => {
   return axios.get(`${BASE_URL_ROOT}/users`);

@@ -21,7 +21,7 @@ const Registrar = () => {
 
         try {
             // Acesso direto à URL raiz do Django para Registro
-            const response = await axios.post('https://heroesflix-backend.onrender.com/users/', { 
+            const response = await axios.post('http://localhost:8000/users/', { 
                 name: email.split("@")[0],  
                 email: email,
                 password: senha,
