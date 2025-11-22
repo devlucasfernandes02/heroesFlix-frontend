@@ -1,162 +1,159 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ListaDeConteudos from "../components/ListaDeConteudos";
-import bannerUrl from "../assets/Heroes-image.webp";
+import api from "../services/api";
 import Footer from "../components/Footer";
 
+const ROW_PADDING = '4rem';
+const HERO_BLUE = '#1948c7';
+
 const Home = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const profileName = location.state?.profileName || "Visitante";
+  const navigate = useNavigate();
+  const [bannerItem, setBannerItem] = useState(null);
 
-    return (
-        <HomeContainer>
-            <HomeHeader>
-                <Logo onClick={() => navigate("/home")}> HeroesFlix </Logo>
-                <Nav>
-                    <StyledLink to="/home">Início</StyledLink>
-                    <StyledLink to="/series">Séries</StyledLink>
-                    <StyledLink to="/filmes">Filmes</StyledLink>
-                </Nav>
-                <Profile>
-                    Bem-vindo, <strong>{profileName}</strong>
-                </Profile>
-            </HomeHeader>
+  // Busca o primeiro filme de heróis para o banner
+  useEffect(() => {
+    const fetchBanner = async () => {
+      try {
+        const res = await api.get('/filmes/herois/?page=1');
+        if (res.data.results && res.data.results.length > 0) {
+          setBannerItem(res.data.results[0]);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar banner:", err);
+      }
+    };
+    fetchBanner();
+  }, []);
 
-            {/* <Banner>
-                <img src={bannerUrl} alt="Banner" />
-                <BannerInfo>
-                    <h1>O Herói da Meia-Noite</h1>
-                    <p>O melhor dos heróis com superpoderes e ação ininterrupta!</p>
-                    <button>Assistir</button>
-                </BannerInfo>
-            </Banner> */}
+  return (
+    <HomeContainer>
+      <HomeHeader>
+        <Logo onClick={() => navigate("/home")}>HeroesFlix</Logo>
+        <Nav>
+          <NavLink onClick={() => navigate("/home")}>Início</NavLink>
+          <NavLink onClick={() => navigate("/series")}>Séries</NavLink>
+          <NavLink onClick={() => navigate("/filmes")}>Filmes</NavLink>
+        </Nav>
+      </HomeHeader>
 
-            <ContentWrapper>
-                {/* Seção de Filmes e Séries de Heróis com scroll infinito */}
-                <ListaDeConteudos titulo="Filmes de Heróis" endpoint="filmes/herois" />
-                <ListaDeConteudos titulo="Séries de Heróis" endpoint="series/herois" />
+      {bannerItem && (
+        <Banner onClick={() => navigate(`/item/filmes/${bannerItem.id}`)}>
+          <BannerImage src={`https://image.tmdb.org/t/p/original${bannerItem.backdrop_path}`} alt={bannerItem.title} />
+          <BannerInfo>
+            <h1>{bannerItem.title}</h1>
+            <p>{bannerItem.overview}</p>
+            <button>Assistir</button>
+          </BannerInfo>
+        </Banner>
+      )}
 
-                {/* Outras seções opcionais, como populares, top 10 e ação */}
-                <ListaDeConteudos titulo="Filmes Marvel" endpoint="filmes/marvel" />
-                <ListaDeConteudos titulo="Filmes DC" endpoint="filmes/dc" />
-                <ListaDeConteudos titulo="Heroes Alternativos" endpoint="filmes/herois-alternativos" />
-            </ContentWrapper>
+      <ContentWrapper>
+        <ListaDeConteudos titulo="Filmes de Heróis" endpoint="filmes/herois" tipo="filmes" />
+        <ListaDeConteudos titulo="Séries de Heróis" endpoint="series/herois" tipo="series" />
+        <ListaDeConteudos titulo="Filmes Marvel" endpoint="filmes/marvel" tipo="filmes" />
+        <ListaDeConteudos titulo="Filmes DC" endpoint="filmes/dc" tipo="filmes" />
+        <ListaDeConteudos titulo="Heroes Alternativos" endpoint="filmes/herois-alternativos" tipo="filmes" />
+     </ContentWrapper>
 
-            <Footer />
-        </HomeContainer>
-    );
+
+      <Footer />
+    </HomeContainer>
+  );
 };
 
 export default Home;
 
-// =================== ESTILOS ===================
-
 const HomeContainer = styled.div`
-    min-height: 100vh;
-    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url(${bannerUrl});
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-    font-family: 'Roboto', Arial, sans-serif;
+  min-height: 100vh;
+  background-color: #111;
+  color: #fff;
+  font-family: 'Roboto', Arial, sans-serif;
 `;
 
 const HomeHeader = styled.header`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 40px;
-    background: rgba(20,20,20,0.95);
-    position: relative;
-    z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+  background: rgba(20,20,20,0.95);
+  position: relative;
+  z-index: 10;
 `;
 
 const Logo = styled.h1`
-    font-size: 2.5rem;
-    font-style: italic;
-    color: #1948c7ff;
-    cursor: pointer;
-    user-select: none;
-`;  
+  font-size: 2.5rem;
+  font-style: italic;
+  color: ${HERO_BLUE};
+  cursor: pointer;
+  user-select: none;
+`;
 
 const Nav = styled.nav`
-    display: flex;
-    gap: 32px;
+  display: flex;
+  gap: 32px;
 `;
 
-const StyledLink = styled(Link)`
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    transition: color 0.2s;
-    &:hover {
-        color: #1948c7ff;
-    }
+const NavLink = styled.div`
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  &:hover { color: ${HERO_BLUE}; }
 `;
 
-const Profile = styled.div`
-    font-size: 1.1rem;
-    color: #fff;
-    background: rgba(0,0,0,0.5);
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+const Banner = styled.section`
+  position: relative;
+  width: 100%;
+  height: 450px;
+  cursor: pointer;
+  overflow: hidden;
+  margin-bottom: 32px;
 `;
 
-// const Banner = styled.section`
-//     position: relative;
-//     width: 100%;
-//     height: 340px;
-//     overflow: hidden;
-//     margin-bottom: 32px;
-
-//     img {
-//         width: 100%;
-//         height: 100%;
-//         object-fit: cover;
-//         filter: brightness(0.6);
-//     }
-// `;
+const BannerImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.5);
+  transition: transform 0.5s ease;
+  ${Banner}:hover & {
+    transform: scale(1.05);
+  }
+`;
 
 const BannerInfo = styled.div`
-    position: absolute;
-    top: 40px;
-    left: 60px;
-    z-index: 2;
+  position: absolute;
+  bottom: 50px;
+  left: ${ROW_PADDING};
+  max-width: 600px;
+  z-index: 2;
 
-    h1 {
-        font-size: 2.8rem;
-        margin-bottom: 12px;
-        color: #fff;
-        text-shadow: 2px 2px 8px #000;
-    }
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 12px;
+  }
 
-    p {
-        font-size: 1.3rem;
-        margin-bottom: 18px;
-        color: #fff;
-        text-shadow: 1px 1px 6px #000;
-    }
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 18px;
+    line-height: 1.4rem;
+  }
 
-    button {
-        background: #e50914;
-        color: #fff;
-        border: none;
-        padding: 12px 32px;
-        font-size: 1.1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.2s;
-
-        &:hover {
-            background: #b0060f;
-        }
-    }
+  button {
+    background: #e50914;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover { background: #b0060f; }
+  }
 `;
 
 const ContentWrapper = styled.div`
-    padding-top: 20px;
+  padding-top: 20px;
 `;

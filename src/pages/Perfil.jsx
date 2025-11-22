@@ -24,7 +24,7 @@ export default function Perfil() {
     return (
         <Container>
             <HeaderPlaceholder>
-                <a href="/">HeroesFlix</a>
+                <Link to="/">HeroesFlix</Link>
             </HeaderPlaceholder>
             <BoxWrapper>
                 <Box>
