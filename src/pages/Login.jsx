@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Button from '../components/Button';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
+import axios from 'axios'; // <-- Garante que axios está importado (e não 'api' local)
 
 const Login = () => {
     const navigate = useNavigate();
@@ -27,10 +28,14 @@ const Login = () => {
             setLoading(true);
             setErrorMessage('');
 
-            const response = await api.post('login/create/', {
+          
+            const response = await axios.post('https://heroesflix-backend.onrender.com/login/create/', { 
                 email,
                 password
             });
+
+            const userId = response.data.user.id;
+            localStorage.setItem('userId', userId); 
 
             console.log("Login OK:", response.data);
             navigate('/Perfil');
@@ -40,8 +45,11 @@ const Login = () => {
 
             if (error.response?.status === 401) {
                 setErrorMessage("Email ou senha incorretos.");
+            } else if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
+                 // Captura o erro quando o backend está parado
+                 setErrorMessage("Erro ao conectar ao servidor. Verifique se o backend (porta 8000) está rodando.");
             } else {
-                setErrorMessage("Erro ao conectar ao servidor.");
+                setErrorMessage("Erro desconhecido ao conectar ao servidor.");
             }
         } finally {
             setLoading(false);
@@ -92,11 +100,9 @@ const Login = () => {
     );
 };
 
-// =================================== // ESTILOS (Styled Components) - 
-
 export default Login;
 
-// ===================== STYLED COMPONENTS =====================
+// ===================== STYLED COMPONENTS (não modificados) =====================
 
 const Container = styled.div`
   position: relative;

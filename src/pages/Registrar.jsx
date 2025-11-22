@@ -4,7 +4,8 @@ import bannerUrl from '../assets/Heroes-image.webp';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../services/api';
+import axios from 'axios'; 
+
 
 const Registrar = () => {
     const navigate = useNavigate();
@@ -19,7 +20,8 @@ const Registrar = () => {
         setErrorMsg('');
 
         try {
-            const response = await api.post("users/", {
+            // Acesso direto à URL raiz do Django para Registro
+            const response = await axios.post('https://heroesflix-backend.onrender.com/users/', { 
                 name: email.split("@")[0],  
                 email: email,
                 password: senha,
@@ -102,9 +104,7 @@ const Registrar = () => {
 
 export default Registrar;
 
-/* ===================================
-   ESTILOS
-=================================== */
+// ===================== STYLED COMPONENTS (RESTANTE DO CÓDIGO) =====================
 
 const Container = styled.div`
   position: relative;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
@@ -11,6 +11,7 @@ export default function ListaDeConteudos({ titulo, endpoint, tipo }) {
   const [conteudos, setConteudos] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true);
   const rowRef = useRef();
   const navigate = useNavigate();
 
@@ -23,17 +24,20 @@ export default function ListaDeConteudos({ titulo, endpoint, tipo }) {
 
   const fetchConteudos = async (pageNumber = 1) => {
     try {
+      setLoading(true);
       const res = await api.get(`${endpoint}?page=${pageNumber}`);
       const results = res.data.results || res.data;
       if (results.length < PAGE_SIZE) setHasMore(false);
       setConteudos(prev => [...prev, ...results]);
     } catch (err) {
       console.error(`Erro ao buscar ${titulo}:`, err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleScroll = () => {
-    if (!hasMore || !rowRef.current) return;
+    if (!hasMore || !rowRef.current || loading) return;
     const { scrollLeft, clientWidth, scrollWidth } = rowRef.current;
     if (scrollLeft + clientWidth >= scrollWidth - 5) {
       const nextPage = page + 1;
@@ -44,6 +48,15 @@ export default function ListaDeConteudos({ titulo, endpoint, tipo }) {
 
   const getImageUrl = (path) =>
     path ? `https://image.tmdb.org/t/p/w500${path}` : '/assets/placeholder-heroi.png';
+
+  if (loading && conteudos.length === 0) {
+    return (
+      <ListContainer>
+        <Title>{titulo}</Title>
+        <LoadingPlaceholder>Carregando {titulo}...</LoadingPlaceholder>
+      </ListContainer>
+    );
+  }
 
   return (
     <ListContainer>
@@ -61,12 +74,17 @@ export default function ListaDeConteudos({ titulo, endpoint, tipo }) {
             />
           </ItemWrapper>
         ))}
+        {loading && conteudos.length > 0 && <Spinner>...</Spinner>}
       </ScrollableRow>
     </ListContainer>
   );
 }
 
-// =================== Styled Components ===================
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
 const ListContainer = styled.div`
   padding: 1rem 0;
   color: white;
@@ -110,4 +128,17 @@ const ContentImage = styled.img`
   min-height: 100px;
   background-color: #333;
   ${ItemWrapper}:hover & { border: 2px solid ${HERO_BLUE}; }
+`;
+
+const LoadingPlaceholder = styled.div`
+  padding-left: ${ROW_PADDING};
+  color: #aaa;
+  font-size: 1.2rem;
+`;
+
+const Spinner = styled.div`
+  color: ${HERO_BLUE};
+  font-size: 2rem;
+  padding: 0 2rem;
+  animation: ${spin} 1s infinite linear;
 `;

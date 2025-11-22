@@ -1,16 +1,34 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Importe useLocation
 import ListaDeConteudos from "../components/ListaDeConteudos";
 import api from "../services/api";
-import Footer from "../components/Footer";
 
 const ROW_PADDING = '4rem';
 const HERO_BLUE = '#1948c7';
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [bannerItem, setBannerItem] = useState(null);
+  const [profileName, setProfileName] = useState("Perfil"); // Estado para o nome do perfil
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para o pop-up do menu
+
+  // Busca o nome do perfil do state de navegação ou local storage
+  useEffect(() => {
+    // 1. Tenta pegar do state de navegação (após a seleção na tela /Perfil)
+    if (location.state && location.state.profileName) {
+        setProfileName(location.state.profileName);
+        localStorage.setItem('currentProfileName', location.state.profileName);
+    } 
+    // 2. Se não estiver no state, tenta pegar do localStorage
+    else {
+        const storedName = localStorage.getItem('currentProfileName');
+        if (storedName) {
+            setProfileName(storedName);
+        }
+    }
+  }, [location.state]);
 
   // Busca o primeiro filme de heróis para o banner
   useEffect(() => {
@@ -27,6 +45,17 @@ const Home = () => {
     fetchBanner();
   }, []);
 
+  // FUNÇÕES DE AÇÃO DO MENU
+  const handleSignOut = () => {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('currentProfileName');
+    navigate('/Login');
+  };
+
+  const handleChangeProfile = () => {
+    navigate('/Perfil');
+  };
+
   return (
     <HomeContainer>
       <HomeHeader>
@@ -36,6 +65,21 @@ const Home = () => {
           <NavLink onClick={() => navigate("/series")}>Séries</NavLink>
           <NavLink onClick={() => navigate("/filmes")}>Filmes</NavLink>
         </Nav>
+        
+        {/* NOVO: CONTAINER DO PERFIL E POP-UP */}
+        <ProfileContainer onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <ProfileName>{profileName}</ProfileName>
+            {isMenuOpen && (
+                <ProfileMenu>
+                    <ProfileMenuItem onClick={handleChangeProfile}>
+                        Alterar Perfil
+                    </ProfileMenuItem>
+                    <ProfileMenuItem onClick={handleSignOut}>
+                        Sair da Conta
+                    </ProfileMenuItem>
+                </ProfileMenu>
+            )}
+        </ProfileContainer>
       </HomeHeader>
 
       {bannerItem && (
@@ -58,7 +102,7 @@ const Home = () => {
      </ContentWrapper>
 
 
-      <Footer />
+      {/* REMOVIDO: <Footer /> */}
     </HomeContainer>
   );
 };
@@ -79,7 +123,7 @@ const HomeHeader = styled.header`
   padding: 24px 40px;
   background: rgba(20,20,20,0.95);
   position: relative;
-  z-index: 10;
+  z-index: 100; /* Aumentado para garantir que o menu fique visível */
 `;
 
 const Logo = styled.h1`
@@ -93,6 +137,8 @@ const Logo = styled.h1`
 const Nav = styled.nav`
   display: flex;
   gap: 32px;
+  flex-grow: 1; /* Permite que a navegação ocupe o espaço central */
+  margin-left: 50px;
 `;
 
 const NavLink = styled.div`
@@ -102,6 +148,63 @@ const NavLink = styled.div`
   transition: color 0.2s;
   &:hover { color: ${HERO_BLUE}; }
 `;
+
+// ======================= NOVOS ESTILOS PARA O PERFIL =======================
+
+const ProfileContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const ProfileName = styled.span`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-right: 15px;
+`;
+
+const ProfileMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #141414;
+  border: 1px solid #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  z-index: 101;
+  min-width: 180px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px;
+`;
+
+const ProfileMenuItem = styled.button`
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  color: #fff;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: ${HERO_BLUE};
+  }
+`;
+
+// ======================= FIM NOVOS ESTILOS =======================
 
 const Banner = styled.section`
   position: relative;

@@ -1,5 +1,23 @@
-import api from "../api";
+import api from "./api";
+import axios from "axios";
+
+const BASE_URL_ROOT = "https://heroesflix-backend.onrender.com";
 
 export const getUsers = () => {
-  return api.get("/users");
+  return axios.get(`${BASE_URL_ROOT}/users`);
+};
+
+export const getProfiles = (userId) => {
+
+    return axios.get(`${BASE_URL_ROOT}/users/${userId}/profiles`);
+};
+
+export const createProfile = (userId, name) => {
+
+    return axios.post(`${BASE_URL_ROOT}/users/${userId}/profiles`, { name });
+};
+
+export const deleteProfile = (userId, profileId) => {
+
+    return axios.delete(`${BASE_URL_ROOT}/users/${userId}/profiles/${profileId}`);
 };

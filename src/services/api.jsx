@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",  // ← para desenvolver
-  // baseURL: "https://heroesflix-backend.onrender.com",  // ← para produção
+  baseURL: "https://heroesflix-backend.onrender.com/api",  // ← para desenvolver
+  // baseURL: "http://localhost:8000/api",  // ← para produção
 });
 
 export default api;
